@@ -34,4 +34,29 @@ public class TestDataBuild {
 
 	}
 
+	public AddPlace addPlaceData(String name, String language, String address) {
+
+		AddPlace ap = new AddPlace();
+		ap.setAccuracy(50);
+		ap.setLanguage(language);
+		ap.setPhone_number("(+91) 983 893 3937");
+		ap.setName(name);
+		ap.setWebsite("http://google.com");
+		ap.setAddress(address);
+
+		Location l = new Location();
+		l.setLat(-34.383494);
+		l.setLng(34.427362);
+
+		ap.setLocation(l);
+
+		List<String> ty = new ArrayList<String>();
+		ty.add("shoe park");
+		ty.add("shop");
+
+		ap.setTypes(ty);
+
+		return ap;
+	}
+
 }

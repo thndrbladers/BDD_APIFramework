@@ -7,11 +7,16 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.junit.Assert;
 import static org.junit.Assert.*;
+
+import java.io.IOException;
+
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.*;
+
+import resources.APIResources;
 import resources.TestDataBuild;
 import resources.Utils;
 
@@ -22,17 +27,24 @@ public class stepDefinitions extends Utils {
 	TestDataBuild testData;
 	Response response;
 
-	@Given("Add place Payload")
-	public void add_place_payload() {
+	@Given("Add place Payload with {string} {string} {string}")
+	public void add_place_payload_with(String name, String language, String address) throws IOException {
 		testData = new TestDataBuild();
-		requestSpec = given().spec(requestSpecification()).body(testData.addPlaceData());
+		requestSpec = given().spec(requestSpecification()).body(testData.addPlaceData(name, language, address));
 		responseSpec = responseSpecification();
 
 	}
 
-	@When("User calls {string} with HTTP Post request")
-	public void user_calls_with_http_post_request(String string) {
-		response = requestSpec.when().post("maps/api/place/add/json").then().spec(responseSpec).extract().response();
+	@When("User calls {string} with HTTP {string} request")
+	public void user_calls_with_http_request(String resource, String method) {
+
+		APIResources resourceObj = APIResources.valueOf(resource);
+		String getResource = resourceObj.getResource();
+		if (method.equalsIgnoreCase("POST")) {
+			response = requestSpec.when().post(getResource).then().spec(responseSpec).extract().response();
+		} else if (method.equalsIgnoreCase("GET")) {
+			response = requestSpec.when().get(getResource).then().spec(responseSpec).extract().response();
+		}
 
 	}
 
