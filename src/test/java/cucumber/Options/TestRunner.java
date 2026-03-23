@@ -6,10 +6,8 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(
-    features = "classpath:features",
-    glue = {"stepDefinitions"},
-    plugin = { "pretty" }
-)
+@CucumberOptions(features = "src/test/java/features", glue = { "stepDefinitions" }, plugin = {
+		"pretty" }, tags = "@DeletePlaceAPI")
 public class TestRunner {
+
 }

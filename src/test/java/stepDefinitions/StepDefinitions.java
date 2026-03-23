@@ -20,16 +20,16 @@ import resources.APIResources;
 import resources.TestDataBuild;
 import resources.Utils;
 
-public class stepDefinitions extends Utils {
+public class StepDefinitions extends Utils {
 
 	RequestSpecification requestSpec;
 	ResponseSpecification responseSpec;
-	TestDataBuild testData;
+	TestDataBuild testData = new TestDataBuild();
 	Response response;
+	static String placeID;
 
 	@Given("Add place Payload with {string} {string} {string}")
 	public void add_place_payload_with(String name, String language, String address) throws IOException {
-		testData = new TestDataBuild();
 		requestSpec = given().spec(requestSpecification()).body(testData.addPlaceData(name, language, address));
 		responseSpec = responseSpecification();
 
@@ -41,9 +41,13 @@ public class stepDefinitions extends Utils {
 		APIResources resourceObj = APIResources.valueOf(resource);
 		String getResource = resourceObj.getResource();
 		if (method.equalsIgnoreCase("POST")) {
+			//response = requestSpec.when().post(getResource).then().extract().response();
 			response = requestSpec.when().post(getResource).then().spec(responseSpec).extract().response();
 		} else if (method.equalsIgnoreCase("GET")) {
+			//response = requestSpec.when().get(getResource).then().extract().response();
 			response = requestSpec.when().get(getResource).then().spec(responseSpec).extract().response();
+		}else if(method.equalsIgnoreCase("DELETE")) {
+			response = requestSpec.when().delete(getResource).then().spec(responseSpec).extract().response();
 		}
 
 	}
@@ -59,6 +63,27 @@ public class stepDefinitions extends Utils {
 
 		assertEquals(response.jsonPath().getString(keyValue), expectedValue);
 
+	}
+
+	@Then("Verify place got added using {string} using {string}")
+	public void verify_place_got_added_using_using(String expName, String resource) throws IOException {
+		// this is to extract the place id from post response
+		placeID = getJsonPath(response, "place_id");
+
+		// updated the request specification for GET request as it doesn't accept the
+		// same body as POST. (Overriding)
+		requestSpec = given().spec(requestSpecification()).queryParam("place_id", placeID);
+
+		// Calling already available "reusable method" to fetch the response.
+		user_calls_with_http_request(resource, "GET");
+		Assert.assertEquals(getJsonPath(response, "name"), expName);
+
+	}
+
+	@Given("Delete Place API Payload")
+	public void delete_place_api_payload() throws IOException {
+		requestSpec=given().spec(requestSpecification()).body(testData.deletePlaceData(placeID));
+		responseSpec = responseSpecification();
 	}
 
 }

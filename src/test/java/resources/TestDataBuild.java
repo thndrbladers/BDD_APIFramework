@@ -59,4 +59,13 @@ public class TestDataBuild {
 		return ap;
 	}
 
+	public String deletePlaceData(String place_id) {
+		System.out.println(place_id);
+
+		return "{\r\n"
+				+ "\r\n"
+				+ "    \"place_id\":\""+place_id+"\"\r\n"
+				+ "}";
+
+	}
 }
