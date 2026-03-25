@@ -5,10 +5,20 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
+import net.masterthought.cucumber.Configuration;
+import net.masterthought.cucumber.ReportBuilder;
+import net.masterthought.cucumber.Reportable;
+import net.masterthought.cucumber.json.support.Status;
+import net.masterthought.cucumber.presentation.PresentationMode;
+
 import org.junit.Assert;
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -84,6 +94,7 @@ public class StepDefinitions extends Utils {
 	public void delete_place_api_payload() throws IOException {
 		requestSpec=given().spec(requestSpecification()).body(testData.deletePlaceData(placeID));
 		responseSpec = responseSpecification();
+		
 	}
 
 }
