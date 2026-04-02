@@ -32,6 +32,13 @@ import resources.Utils;
 
 public class StepDefinitions extends Utils {
 
+	public StepDefinitions() {
+		counter = counter + 1;
+		System.out.println("No. of time class was initialized :" + counter);
+	}
+
+	public static int counter = 0;
+
 	RequestSpecification requestSpec;
 	ResponseSpecification responseSpec;
 	TestDataBuild testData = new TestDataBuild();
@@ -51,12 +58,12 @@ public class StepDefinitions extends Utils {
 		APIResources resourceObj = APIResources.valueOf(resource);
 		String getResource = resourceObj.getResource();
 		if (method.equalsIgnoreCase("POST")) {
-			//response = requestSpec.when().post(getResource).then().extract().response();
+			// response = requestSpec.when().post(getResource).then().extract().response();
 			response = requestSpec.when().post(getResource).then().spec(responseSpec).extract().response();
 		} else if (method.equalsIgnoreCase("GET")) {
-			//response = requestSpec.when().get(getResource).then().extract().response();
+			// response = requestSpec.when().get(getResource).then().extract().response();
 			response = requestSpec.when().get(getResource).then().spec(responseSpec).extract().response();
-		}else if(method.equalsIgnoreCase("DELETE")) {
+		} else if (method.equalsIgnoreCase("DELETE")) {
 			response = requestSpec.when().delete(getResource).then().spec(responseSpec).extract().response();
 		}
 
@@ -92,9 +99,9 @@ public class StepDefinitions extends Utils {
 
 	@Given("Delete Place API Payload")
 	public void delete_place_api_payload() throws IOException {
-		requestSpec=given().spec(requestSpecification()).body(testData.deletePlaceData(placeID));
+		requestSpec = given().spec(requestSpecification()).body(testData.deletePlaceData(placeID));
 		responseSpec = responseSpecification();
-		
+
 	}
 
 }

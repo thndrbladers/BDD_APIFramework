@@ -77,4 +77,11 @@ public class AddPlace {
 		this.language = language;
 	}
 
+	@Override
+	public String toString() {
+		return "AddPlace [location=" + location + ", accuracy=" + accuracy + ", name=" + name + ", phone_number="
+				+ phone_number + ", address=" + address + ", types=" + types + ", website=" + website + ", language="
+				+ language + "]";
+	}
+
 }
